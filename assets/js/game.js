@@ -31,7 +31,10 @@ var fight = function (enemyName) {
         }
 
         // remove enemy's health by subtracting the amount set in the playerAttack variable
-        enemyHealth = enemyHealth - playerAttack;
+        // generate random damage value based on player's attack power
+        var damage = randomNumber(playerAttack - 3, playerAttack);
+
+        enemyHealth = Math.max(0, enemyHealth - damage);
         console.log(
             playerName + " attacked " + enemyName + ". " + enemyName + " now has " + enemyHealth + " health remaining."
         );
@@ -39,14 +42,16 @@ var fight = function (enemyName) {
         // check enemy's health
         if (enemyHealth <= 0) {
             window.alert(enemyName + " has died!");
-            playerMoney = playerMoney + 20;
+            playerMoney = Math.max(0, playerMoney - 10);
             break;
         } else {
             window.alert(enemyName + " still has " + enemyHealth + " health left.");
         }
 
         // remove player's health by subtracting the amount set in the enemyAttack variable
-        playerHealth = playerHealth - enemyAttack;
+        var damage = randomNumber(enemyAttack - 3, enemyAttack);
+
+        playerHealth = Math.max(0, playerHealth - damage);
         console.log(
             enemyName + " attacked " + playerName + ". " + playerName + " now has " + playerHealth + " health remaining."
         );
@@ -77,7 +82,7 @@ var startGame = function () {
             var pickedEnemyName = enemyNames[i];
 
             // reset enemyHealth before starting new fight
-            enemyHealth = 50;
+            enemyHealth = randomNumber(40, 60);
 
             // use debugger to pause script from running and check what's going on at that moment in the code
             // debugger;
@@ -128,45 +133,52 @@ var endGame = function () {
 var shop = function () {
     var shopOptionPrompt = window.prompt(
         "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice."
-      );
+    );
 
-      // use switch to carry out action
-      switch (shopOptionPrompt) {
+    // use switch to carry out action
+    switch (shopOptionPrompt) {
         case "REFILL": // new case
         case "refill":
-          if (playerMoney >= 7) {
-            window.alert("Refilling player's health by 20 for 7 dollars.");
-      
-            playerHealth = playerHealth + 20;
-            playerMoney = playerMoney - 7;
-          }
-          else {
-            window.alert("You don't have enough money!");
-          }
-      
-          break;
+            if (playerMoney >= 7) {
+                window.alert("Refilling player's health by 20 for 7 dollars.");
+
+                playerHealth = playerHealth + 20;
+                playerMoney = playerMoney - 7;
+            }
+            else {
+                window.alert("You don't have enough money!");
+            }
+
+            break;
         case "UPGRADE": // new case
         case "upgrade":
-          if (playerMoney >= 7) {
-            window.alert("Upgrading player's attack by 6 for 7 dollars.");
-      
-            playerAttack = playerAttack + 6;
-            playerMoney = playerMoney - 7;
-          }
-          else {
-            window.alert("You don't have enough money!");
-          }
-      
-          break;
+            if (playerMoney >= 7) {
+                window.alert("Upgrading player's attack by 6 for 7 dollars.");
+
+                playerAttack = playerAttack + 6;
+                playerMoney = playerMoney - 7;
+            }
+            else {
+                window.alert("You don't have enough money!");
+            }
+
+            break;
         case "LEAVE": // new case
         case "leave":
-          window.alert("Leaving the store.");
-          break;
+            window.alert("Leaving the store.");
+            break;
         default:
-          window.alert("You did not pick a valid option. Try again.");
-          shop();
-          break;
-      }
+            window.alert("You did not pick a valid option. Try again.");
+            shop();
+            break;
+    }
+};
+
+// function to generate a random numeric value
+var randomNumber = function (min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
+
+    return value;
 };
 
 startGame();
